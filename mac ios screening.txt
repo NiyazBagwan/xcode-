@@ -1,0 +1,98 @@
+import SwiftUI
+
+struct ContentView: View {
+    @State private var leads = [
+        Lead(name: "Ayesha Khan", service: "Pool Fencing Installation", address: "29 Toil Pl, South Yarra VIC 3141", dateTime: "10 Aug, 12:00 pm", status: "Uncontacted", distance: 8.0, timeLeft: "00:00:00"),
+        Lead(name: "Xianli Kun", service: "Noise Reduction Fencing", address: "15 Hardware Ln, Melbourne VIC", dateTime: "10 Aug, 01:30 pm", status: "Uncontacted", distance: 47.0, timeLeft: "01:00:00"),
+        Lead(name: "Charlotte Jones", service: "Noise Reduction Fencing", address: "Port Melbourne, Victoria 3207", dateTime: "10 Aug, 02:00 pm", status: "Contacted", distance: 27.0, timeLeft: "02:00:00")
+    ]
+
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(leads) { lead in
+                    LeadRowView(lead: lead)
+                }
+            }
+            .navigationTitle("Leads")
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button(action: {}) {
+                        Image(systemName: "phone.fill")
+                    }
+                    Spacer()
+                    Button(action: {}) {
+                        Image(systemName: "message.fill")
+                    }
+                    Spacer()
+                    Button(action: {}) {
+                        Image(systemName: "map.fill")
+                    }
+                    Spacer()
+                    Button(action: {}) {
+                        Image(systemName: "ellipsis")
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct LeadRowView: View {
+    var lead: Lead
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(lead.name)
+                    .font(.headline)
+                Text(lead.service)
+                    .font(.subheadline)
+                Text(lead.address)
+                    .font(.caption)
+                Text(lead.dateTime)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                HStack {
+                    Text(lead.status)
+                        .font(.caption)
+                        .padding(4)
+                        .background(lead.status == "Contacted" ? Color.green : Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(4)
+                    Spacer()
+                    Text(String(format: "%.1f km", lead.distance))
+                        .font(.caption)
+                }
+            }
+            Spacer()
+            VStack {
+                Text(lead.timeLeft)
+                    .font(.headline)
+                    .foregroundColor(lead.timeLeft == "00:00:00" ? .red : .green)
+                Spacer()
+                HStack {
+                    Image(systemName: "phone.fill")
+                    Image(systemName: "message.fill")
+                    Image(systemName: "map.fill")
+                }
+                .foregroundColor(.blue)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(8)
+        .shadow(radius: 2)
+    }
+}
+
+struct Lead: Identifiable {
+    var id = UUID()
+    var name: String
+    var service: String
+    var address: String
+    var dateTime: String
+    var status: String
+    var distance: Double
+    var timeLeft: String
+}
